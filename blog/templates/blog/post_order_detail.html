@@ -1,0 +1,29 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <div class="post">
+
+        <a class="btn btn-default" href="{% url 'post_order_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+
+        <h2>{{ post.orderNo }}</h2>
+        <p>{{ post.campany.name }}</p>
+        <p>{{ post.division.name }}</p>
+        <p>{{ post.Process.name }}</p>
+        <p>{{ post.subjectName }}</p>
+        <p>{{ post.chargeName }}</p>
+        <p>{{ post.subProcess }}</p>
+        <p>{{ post.subjectDetail }}</p>
+        <p>{{ post.app_date }}</p>
+        <p>{{ post.requestSection_M }}</p>
+        <p>{{ post.requestSection_E }}</p>
+        <p>{{ post.requestSection_C }}</p>
+        <p>{{ post.wishStart_date }}</p>
+        <p>{{ post.wishEnd_date }}</p>
+        <p>{{ post.failuretype.name }}</p>
+        <p>{{ post.expenseItems.name }}</p>
+        <p>{{ post.budget }}</p>
+        <p>{{ post.safeContact_start }}</p>
+
+        <p>{{ post.safeContact_intermediate|linebreaksbr }}</p>
+    </div>
+{% endblock %}

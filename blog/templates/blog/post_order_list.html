@@ -1,0 +1,136 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <h1>案件リスト</h1>
+    <h4><a href="{% url 'post_order_new' %}">新規追加</a></h4>
+      <table width="4000" height="100" border="1">
+            <tr>
+                 <th width="30" align="center">ID</th>
+                 <th width="80" align="center">会　社</th>
+                 <th width="50">　課　</th>
+                 <th width="80">工　程</th>
+                 <th width="100">工　事　件　名</th>
+                 <th width="100">担　当　者</th>
+                 <th width="100">設備コード</th>
+                 <th>工事受付番号</th>
+                 <th width="200">工　事　内　容</th>
+                 <th>　申し込み　</th>
+                 <th>依頼先　機械</th>
+                 <th>依頼先　電計</th>
+                 <th>依頼先　土建</th>
+                 <th>希　望　工　期　</th>
+                 <th>　　　　　　　　</th>
+                 <th>工 事 区 分</th>
+                 <th>費　目</th>
+                 <th>予算金額</th>
+                 <th>事前措置　有害物除去</th>
+                 <th>事前措置　バルブ操作</th>
+                 <th>事前措置　スイッチ操作</th>
+                 <th>事前措置　ガス濃度検知</th>
+                 <th>連絡　着工時</th>
+                 <th>連絡　中間</th>
+                 <th>連絡　完成</th>
+                 <th>立会　常時</th>
+                 <th>立会　着工前</th>
+
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr>
+                      <td align="center">{{ post.id}}</td>
+                      <td align="center"><a href="{% url 'post_order_detail' pk=post.pk %}">{{ post.campany.name }}</a></td>
+                      <td align="center">{{ post.division.name}}</td>
+                      <td>{{ post.process.name}}</td>
+                      <td>{{ post.subjectName}}</td>
+                      <td align="center">{{ post.chargeName}}</td>
+                      <td>{{ post.subProcess}}</td>
+                      <td>{{ post.orderNo}}</td>
+                      <td>{{ post.subjectDetail}}</td>
+                      <td>{{ post.app_date}}</td>
+<!-- 依頼先　機械　-->
+                      {% if post.requestSection_M %}
+                          <td align="center">〇</td>
+                      {% else %}
+                          <td align="center">-</td>
+                      {% endif %}
+<!-- 依頼先　電気 -->
+                      {% if post.requestSection_E %}
+                          <td align="center">〇</td>
+                      {% else %}
+                          <td align="center">-</td>
+                      {% endif %}
+<!-- 依頼先　土建 -->
+　　　　　　　　　　　　{% if post.requestSection_C %}
+                          <td align="center">〇</td>
+                      {% else %}
+                          <td align="center">-</td>
+                      {% endif %}
+
+                      <td>{{ post.wishStart_date}}</td>
+                      <td>{{ post.wishEnd_date}}</td>
+                      <td align="center">{{ post.failuretype.name}}</td>
+                      <td align="center">{{ post.expenseItems.name}}</td>
+                      <td align="right">{{ post.budget}}</td>
+<!--有害物除去-->
+                       {% if post.safePremeasure_removal %}
+                           <td bgcolor="#FF0461" align="center">要</td>
+                       {% else %}
+                           <td align="center">不要</td>
+                       {% endif %}
+<!-- バルブ操作 -->
+　　　　　　　　　　　　 {% if post.safePremeasure_valve %}
+                           <td align="center"><font color =red>要</td>
+                       {% else %}
+                           <td align="center">不要</td>
+                       {% endif %}
+<!--スイッチ操作 -->
+                       {% if post.safePremeasure_switsh %}
+                           <td align="center">要</td>
+                       {% else %}
+                           <td align="center">不要</td>
+                       {% endif %}
+<!-- ガス濃度-->
+                       {% if post.safePremeasure_gas %}
+                           <td align="center">要</td>
+                       {% else %}
+                          <td align="center">不要</td>
+                       {% endif %}
+<!-- 連絡　着工時　-->
+                      {% if post.safeContact_start %}
+                          <td align="center">要</td>
+                      {% else %}
+                          <td align="center">不要</td>
+                      {% endif %}
+<!-- 連絡　中間時-->
+                      {% if post.safeContact_intermediate %}
+                          <td align="center">要</td>
+                      {% else %}
+                          <td align="center">不要</td>
+                      {% endif %}
+<!-- 連絡完成時-->
+                      {% if post.safeContact_complete %}
+                          <td align="center">要</td>
+                      {% else %}
+                          <td align="center">不要</td>
+                      {% endif %}
+<!-- 立会　常時-->
+                      {% if post.safeWitness_always %}
+                          <td align="center">要</td>
+                      {% else %}
+                          <td align="center">不要</td>
+                      {% endif %}
+<!-- 立会　着工前-->
+                      {% if post.safeWitness_start %}
+                          <td align="center">要</td>
+                      {% else %}
+                          <td align="center">不要</td>
+                      {% endif %}
+
+                    </tr>
+
+
+            {% endfor %}
+
+      </table>
+{% endblock %}

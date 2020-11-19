@@ -1,0 +1,26 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <h1>会社マスタ</h1>
+    <h4><a href="{% url 'post_campany_new' %}">新規追加</a></h4>
+      <table border="1">
+            <tr>
+                 <th align="center" width="30">ID</th>
+                 <th width="150">社　名</th>
+                 <th width="400">住　所</th>
+                 <th width="150">電話番号</th>
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr>
+                      <td align='center'>{{ post.id}}</td>
+                      <td><a href="{% url 'post_campany_detail' pk=post.pk %}">{{ post.name }}</a></td>
+                      <td>{{ post.address}}</td>
+                      <td>{{ post.telephon}}</td>
+                    </tr>
+
+            {% endfor %}
+
+      </table>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <h1>設備コードマスタ</h1>
+    <h4><a href="{% url 'post_subprocess_new' %}">新規追加</a></h4>
+      <table border="1">
+            <tr align="center">
+                 <th width="30">ID</th>
+                 <th width="200">設備コード名</th>
+                 <th width="100">設備コード</th>
+                 <th width="150">設備コードMESCO</th>
+                 <th width="80">会　社</th>
+                 <th width="80">部　門</th>
+                 <th width="80" align="center">工　程</th>
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr align="center">
+                      <td>{{ post.id}}</td>
+                      <td>{{ post.name}}</td>
+                      <td><a href="{% url 'post_subprocess_detail' pk=post.pk %}">{{ post.code }}</a></td>
+                      <td>{{ post.codeM}}</td>
+                      <td>{{ post.campany.name}}</td>
+                      <td>{{ post.division.name}}</td>
+                      <td>{{ post.process.name}}</td>
+                    </tr>
+<!--
+                <div class="post">
+                    <div class="date">
+                        <p>published: {{ post.published_date }}</p>
+                    </div>
+                    <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+-->
+            {% endfor %}
+
+      </table>
+{% endblock %}

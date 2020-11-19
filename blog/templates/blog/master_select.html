@@ -1,0 +1,31 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+
+  <h2>マスタ選択</h2>
+  <h2><a href="{% url 'post_campany_list' %}">会社</a></h2>
+  <h2><a href="{% url 'post_division_list' %}">部門</a></h2>
+  <h2><a href="{% url 'post_process_list' %}">工程</a></h2>
+  <h2><a href="{% url 'post_subprocess_list' %}">設備</a></h2>
+
+<!--
+  <p class="top-menu"> <a href="{% url 'post_list2' %}">リスト表示</a></p>
+  <table border="1">
+            <tr>
+                 <th>日付</th>
+                 <th>タイトル</th>
+                 <th>内　　容</th>
+            </tr>
+            {% for post in posts %}
+                <div class="post" >
+                    <tr>
+                      <td>{{ post.published_date}}</td>
+                      <td><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></td>
+                      <td>{{ post.text}}</td>
+                    </tr>
+                </div>
+
+            {% endfor %}
+  </table>
+-->
+{% endblock %}

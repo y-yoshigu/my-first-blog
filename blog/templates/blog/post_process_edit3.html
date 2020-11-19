@@ -1,0 +1,54 @@
+{% extends 'blog/base2.html' %}
+
+{% block content %}
+    <h2>新規工程入力テスト</h2>
+    <form action="" method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}
+{% block extrajs %}
+    <script>
+      const campanyElement = $('#id_campany');
+      const divisionElement = $('#id_division');
+      const divisions = {
+        {% for campany in campany_list %}
+            '{{campany.pk}}':[
+              {% for division in campany.division_set.all %}
+                  {
+                    'pk': '{{division.pk}}',
+                    'nama': '{{division.name}}'
+                  },
+              {% endfor %}
+            ],
+        {% endfor %}
+      };
+
+      const changeCategory = (select) => {
+        divisionElement.children().remove();
+
+        const campanyId = campanyElement.val();
+        const divisionList = divisions[campanyId];
+
+        for (const division of divisionList) {
+          const option = $('<option>');
+          option.val(division['pk']);
+          option.text(division['name']);
+          divisionElement.append(option);
+        }
+        if (select !== undefined) {
+          divisionElement.val(select);
+        }
+      };
+
+      $('#id_campany').on('change', () => {
+            changeCategory();
+      });
+
+//      if (campanyElement.val()) {
+//        const selectedCategory = divisionElement.val();
+//        changeCategory(selectedCategory);
+      }
+
+    </script>
+{% endblock %}
