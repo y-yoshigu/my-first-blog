@@ -5,7 +5,7 @@ from django.utils import timezone
 from .models import Post
 from .models import Campany,Division,Process,Subprocess,Failuretype,ExpenseItems,Order
 from .forms import PostForm
-from .forms import CampanyForm,DivisionForm,ProcessForm,SubprocessForm,OrderForm,ProcessForm2
+from .forms import CampanyForm,DivisionForm,ProcessForm,SubprocessForm,OrderForm,FailuretypeForm,ExpenseItemsForm,ProcessForm2
 from django.views import generic
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -185,13 +185,13 @@ def post_process_edit(request, pk):
 class ProcessCreate(generic.CreateView):
     model = Process
     form_class = ProcessForm2
-    template_name = 'blog/post_process_edit2.html'
+    template_name = 'blog/post_process_edit3.html'
     success_url = '/'
 
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        context['campany_list'] = Campany.objects.all()
-#        return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campany_list'] = Campany.objects.all()
+        return context
 
 def ajax_get_category(request):
          pk = request.GET.get('pk')
@@ -242,6 +242,78 @@ def post_subprocess_edit(request, pk):
     else:
         form = SubprocessForm(instance=post)
     return render(request, 'blog/post_subprocess_edit.html', {'form': form})
+
+#工事区分マスタ
+@login_required
+def post_failuretype_list(request):
+    posts = Failuretype.objects.all()
+    return render(request, 'blog/post_failuretype_list.html', {'posts':posts})
+
+#@login_required
+#def post_subprocess_detail(request, pk):
+#    post = get_object_or_404(Subprocess, pk=pk)
+#    return render(request, 'blog/post_subprocess_detail.html', {'post': post})
+
+@login_required
+def post_failuretype_new(request):
+    if request.method == "POST":
+        form = FailuretypeForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_failuretype_list',)
+    else:
+        form = FailuretypeForm()
+    return render(request, 'blog/post_failuretype_edit.html', {'form': form})
+
+@login_required
+def post_failuretype_edit(request, pk):
+    post = get_object_or_404(Failuretype, pk=pk)
+    if request.method == "POST":
+        form = FailuretypeForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_failuretype_list',)
+    else:
+        form = SubprocessForm(instance=post)
+    return render(request, 'blog/post_failuretype_edit.html', {'form': form})
+
+#費目マスタ
+@login_required
+def post_expenseItems_list(request):
+    posts = ExpenseItems.objects.all()
+    return render(request, 'blog/post_expenseItems_list.html', {'posts':posts})
+
+#@login_required
+#def post_subprocess_detail(request, pk):
+#    post = get_object_or_404(Subprocess, pk=pk)
+#    return render(request, 'blog/post_subprocess_detail.html', {'post': post})
+
+@login_required
+def post_expenseItems_new(request):
+    if request.method == "POST":
+        form = ExpenseItemsForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_expenseItems_list',)
+    else:
+        form = ExpenseItemsForm()
+    return render(request, 'blog/post_expenseItems_edit.html', {'form': form})
+
+@login_required
+def post_expenseItems_edit(request, pk):
+    post = get_object_or_404(ExpenseItems, pk=pk)
+    if request.method == "POST":
+        form = ExpenseItemsForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_expenseItems_list',)
+    else:
+        form = ExpenseItemsForm(instance=post)
+    return render(request, 'blog/post_expenseItems_edit.html', {'form': form})
 
 #依頼指示書
 @login_required

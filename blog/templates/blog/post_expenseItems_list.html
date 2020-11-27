@@ -1,0 +1,22 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <h1>費目マスタ</h1>
+    <h4><a href="{% url 'post_expenseItems_new' %}">新規追加</a></h4>
+      <table border="1">
+            <tr align="center">
+                 <th width="30">ID</th>
+                 <th width="200">費目名</th>
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr align="center">
+                      <td>{{ post.id}}</td>
+                      <td>{{ post.name }}</td>
+                    </tr>
+
+            {% endfor %}
+
+      </table>
+{% endblock %}

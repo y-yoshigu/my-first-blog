@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import Post
-from .models import Campany,Division,Process,Subprocess,Order
+from .models import Campany,Division,Process,Subprocess,Order,Failuretype,ExpenseItems
 
 class PostForm(forms.ModelForm):
 
@@ -49,6 +49,20 @@ class SubprocessForm(forms.ModelForm):
         model = Subprocess
         fields = ('name', 'code', 'codeM', 'campany', 'division', 'process',)
         labels = {'name':'設備コード名', 'code':'コード', 'codeM':'MESCOコード', 'campany':'会社名', 'division':'部門名', 'process':'工程名',}
+
+class FailuretypeForm(forms.ModelForm):
+
+    class Meta:
+        model = Failuretype
+        fields = ('name',)
+        labels = {'name':'工事区分',}
+
+class ExpenseItemsForm(forms.ModelForm):
+
+    class Meta:
+        model = ExpenseItems
+        fields = ('name',)
+        labels = {'name':'費　目',}
 
 class OrderForm(forms.ModelForm):
 
