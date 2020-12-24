@@ -7,3 +7,64 @@
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock %}
+
+{% block extrajs %}
+    <script>
+        const parentCategoryElement = $('#id_parent_category2');
+        const divisionElement = $('#id_division');
+
+        const campanyElement = $('#id_campany');
+
+        const divisions = {
+            {% for campany in campany_list %}
+                '{{ campany.pk }}': [
+                    {% for division in campany.division_set.all %}
+                        {
+                            'pk': '{{ division.pk }}',
+                            'name': '{{ division.name }}'
+                        },
+                    {% endfor %}
+                ],
+            {% endfor %}
+        };
+
+
+        const changeCategory = (select) => {
+            // 子カテゴリの選択欄を空にする。
+            divisionElement.children().remove();
+
+            // 選択した親カテゴリに紐づく子カテゴリの一覧を取得する。
+            const parentId = parentCategoryElement.val();
+            const divisionList = divisions[parentId];
+
+            // 子カテゴリの選択肢を作成・追加。
+            for (const division of divisionList) {
+                const option = $('<option>');
+                option.val(division['pk']);
+                option.text(division['name']);
+                divisionElement.append(option);
+            }
+
+            // 指定があれば、そのカテゴリを選択する
+            if (select !== undefined) {
+                divisionElement.val(select);
+            }
+        };
+
+
+        $('#id_parent_category2').on('change', () => {
+            changeCategory();
+            document.getElementById("id_campany").value = document.getElementById("id_parent_category2").value;
+        });
+
+
+        // 入力値に問題があって再表示された場合、ページ表示時点で小カテゴリが絞り込まれるようにする
+        if (parentCategoryElement.val()) {
+            const selectedCategory = divisionElement.val();
+            changeCategory(selectedCategory);
+        }
+
+
+
+    </script>
+{% endblock %}

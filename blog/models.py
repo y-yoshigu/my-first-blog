@@ -71,15 +71,15 @@ class Order(models.Model):
     division = models.ForeignKey(Division,on_delete=models.CASCADE,default=1)
     process = models.ForeignKey(Process,on_delete=models.CASCADE,default=1)
     chargeName = models.CharField(max_length=100,blank=True,null=True)
-    subProcess = models.CharField(max_length=100,blank=True,null=True)
+    subProcess = models.ForeignKey(Subprocess,on_delete=models.CASCADE,default=1)
     orderNo = models.CharField(max_length=50,blank=True,null=True)
     subjectDetail = models.TextField(max_length=1000,blank=True,null=True)
-    app_date = models.DateTimeField(blank=True,null=True)
+    app_date = models.DateField(blank=True,null=True)
     requestSection_M = models.BooleanField(default=False)
     requestSection_E = models.BooleanField(default=False)
     requestSection_C = models.BooleanField(default=False)
-    wishStart_date = models.DateTimeField(blank=True, null=True)
-    wishEnd_date = models.DateTimeField(blank=True, null=True)
+    wishStart_date = models.DateField(blank=True, null=True)
+    wishEnd_date = models.DateField(blank=True, null=True)
     failuretype = models.ForeignKey(Failuretype,on_delete=models.CASCADE,default=2,)
     expenseItems = models.ForeignKey(ExpenseItems,on_delete=models.CASCADE,default=1,)
     budget = models.IntegerField(blank=True,null=True)
@@ -152,3 +152,14 @@ class Order(models.Model):
     comfirmed_C = models.BooleanField(default=False)
 #
     acceptance = models.BooleanField(default=False)
+
+    def approval_client(self):
+        self.clientApproval = True
+        self.save()
+
+#    def __str__(self):
+#        return self.id
+
+
+#電力入力
+#

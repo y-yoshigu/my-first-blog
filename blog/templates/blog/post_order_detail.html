@@ -4,26 +4,106 @@
     <div class="post">
 
         <a class="btn btn-default" href="{% url 'post_order_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a class="btn btn-default" href="{% url 'post_order_remove' pk=post.pk %}">削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+        <a class="btn btn-default" href="{% url 'post_clientApproval' pk=post.pk %}">承認　<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a>
 
-        <h2>{{ post.orderNo }}</h2>
-        <p>{{ post.campany.name }}</p>
-        <p>{{ post.division.name }}</p>
-        <p>{{ post.Process.name }}</p>
-        <p>{{ post.subjectName }}</p>
-        <p>{{ post.chargeName }}</p>
-        <p>{{ post.subProcess }}</p>
-        <p>{{ post.subjectDetail }}</p>
-        <p>{{ post.app_date }}</p>
-        <p>{{ post.requestSection_M }}</p>
-        <p>{{ post.requestSection_E }}</p>
-        <p>{{ post.requestSection_C }}</p>
-        <p>{{ post.wishStart_date }}</p>
-        <p>{{ post.wishEnd_date }}</p>
-        <p>{{ post.failuretype.name }}</p>
-        <p>{{ post.expenseItems.name }}</p>
-        <p>{{ post.budget }}</p>
-        <p>{{ post.safeContact_start }}</p>
+        <h4>{{ post.orderNo }}</h4>
+        <p>会社名　　　：{{ post.campany.name }}</p>
+        <p>課　　　　　：{{ post.division.name }}</p>
+        <p>工程　　　　：{{ post.process.name }}</p>
+        <p>工事件名　　：{{ post.subjectName }}</p>
+        <p>担当者　　　：{{ post.chargeName }}</p>
+        <p>設備コード　：{{ post.subProcess }}</p>
+        <p>工事内容　　：{{ post.subjectDetail }}</p>
+        <p>申込日　　　：{{ post.app_date }}</p>
+<!--依頼先　機械-->
+        {% if post.requestSection_M %}
+            <p>依頼先　機械： 〇</p>
+        {% else %}
+            <p>依頼先　機械： -</p>
+        {% endif %}
+<!--依頼先　電計-->
+        {% if post.requestSection_E %}
+            <p>依頼先　電気計装： 〇</p>
+        {% else %}
+            <p>依頼先　電気計装： -</p>
+        {% endif %}
+<!--依頼先　土建-->
+        {% if post.requestSection_C %}
+            <p>依頼先　土建： 〇</p>
+        {% else %}
+            <p>依頼先　土建： -</p>
+        {% endif %}
 
-        <p>{{ post.safeContact_intermediate|linebreaksbr }}</p>
+        <p>希望工期　　：{{ post.wishStart_date }}　～　{{ post.wishEnd_date }}</p>
+<!--        <p>{{ post.wishEnd_date }}</p> -->
+        <p>工事区分　　：{{ post.failuretype.name }}</p>
+        <p>費目　　　　：{{ post.expenseItems.name }}</p>
+        <p>予算金額　　：￥{{ post.budget }}</p>
+<!--  事前処置　-->
+        <p>事前処置</P>
+          <p>　有害物除去　　：
+            {% if post.safePremeasure_removal %}
+                要
+            {% else %}
+                不要
+            {% endif %}
+          </p>
+          <p>　バルブ操作　　：
+            {% if post.safePremeasure_valve %}
+                要
+            {% else %}
+                不要
+            {% endif %}
+          </p>
+          <p>　スイッチ操作　　：
+            {% if post.safePremeasure_switsh %}
+                要
+            {% else %}
+                不要
+            {% endif %}
+          </p>
+          <p>　ガス濃度　　：
+            {% if post.safePremeasure_gas %}
+                要
+            {% else %}
+                不要
+            {% endif %}
+          </p>
+<!--  連絡　-->
+        <p>連絡</P>
+        <p>　着工時　　：
+          {% if post.safeContact_start %}
+              要
+          {% else %}
+              不要
+          {% endif %}
+        </p>
+        <p>　中間時　　：
+          {% if post.safeContact_intermediate %}
+              要
+          {% else %}
+              不要
+          {% endif %}
+        </p>
+<!-- -->
+        <p>安全環境確認：
+          {% if post.safeApproval %}
+              確認
+          {% else %}
+              未確認
+          {% endif %}
+        </p>
+
+        <p>入力確認　　：
+          {% if post.clientApproval %}
+              確認
+          {% else %}
+              未確認
+          {% endif %}
+        </p>
+
+
+
     </div>
 {% endblock %}

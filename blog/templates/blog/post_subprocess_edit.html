@@ -2,8 +2,87 @@
 
 {% block content %}
     <h2>新規設備コード入力</h2>
-    <form method="POST" class="post-form">{% csrf_token %}
+    <form action="" method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+      const grandparentCategoryElement = $('#id_grandparent_category');
+      const parentCategoryElement = $('#id_parent_category');
+      const processElement = $('#id_process');
+
+      const changeDivision = (select) => {
+        parentCategoryElement.children().remove();
+        $.ajax({
+
+          url: '{% url 'ajax_get_division' %}',
+          type: 'GET',
+          data: {
+            'pk':grandparentCategoryElement.val(),
+          }
+        }).done(response => {
+          for (const division of response.parentCategoryList) {
+            const option = $('<option>');
+            option.val(division['pk']);
+            option.text(division['name']);
+            parentCategoryElement.append(option);
+          }
+          if (select !== undefined) {
+            parentCategoryElement.val(select);
+          }
+
+        });
+
+      };
+
+      grandparentCategoryElement.on('change', () => {
+        changeDivision();
+        changeProcess();
+        document.getElementById("id_campany").value = document.getElementById("id_grandparent_category").value;
+      });
+
+      if (grandparentCategoryElement.val()) {
+        const selectedCategory = parentCategoryElement.val();
+        changeDivision(selectedCategory);
+      }
+
+//
+      const changeProcess = (select) => {
+        processElement.children().remove();
+        $.ajax({
+
+          url: '{% url 'ajax_get_process' %}',
+          type: 'GET',
+          data: {
+            'pk':parentCategoryElement.val(),
+          }
+        }).done(response => {
+          for (const process of response.processList) {
+            const option = $('<option>');
+            option.val(process['pk']);
+            option.text(process['name']);
+            processElement.append(option);
+          }
+          if (select !== undefined) {
+            processElement.val(select);
+          }
+
+        });
+
+      };
+
+      parentCategoryElement.on('change', () => {
+        changeProcess();
+        document.getElementById("id_division").value = document.getElementById("id_parent_category").value;
+      });
+
+      if (parentCategoryElement.val()) {
+        const selectedCategory = processElement.val();
+        changeProcess(selectedCategory);
+      }
+
+    </script>
 {% endblock %}

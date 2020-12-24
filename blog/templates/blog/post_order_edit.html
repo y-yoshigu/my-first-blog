@@ -7,3 +7,121 @@
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock %}
+
+{% block extrajs %}
+    <script>
+      const campanyCategoryElement = $('#id_campany_category');
+      const divisionCategoryElement = $('#id_division_category');
+      const processCategoryElement = $('#id_process_category');
+      const subprocessElement = $('#id_subProcess');
+
+//会社選択時の部門抽出の関数
+      const changeDivision = (select) => {
+        divisionCategoryElement.children().remove();
+        $.ajax({
+
+          url: '{% url 'ajax_get_divisionCategory' %}',
+          type: 'GET',
+          data: {
+            'pk':campanyCategoryElement.val(),
+          }
+        }).done(response => {
+          for (const division of response.divisionCategoryList) {
+            const option = $('<option>');
+            option.val(division['pk']);
+            option.text(division['name']);
+            divisionCategoryElement.append(option);
+          }
+          if (select !== undefined) {
+            divisionCategoryElement.val(select);
+          }
+
+        });
+
+      };
+
+      campanyCategoryElement.on('change', () => {
+        changeDivision();
+        changeProcess();
+        changeSubprocess();
+        document.getElementById("id_campany").value = document.getElementById("id_campany_category").value;
+      });
+
+      if (campanyCategoryElement.val()) {
+        const selectedCategory = divisionCategoryElement.val();
+        changeDivision(selectedCategory);
+      }
+
+//部門選択時の工程抽出の関数
+      const changeProcess = (select) => {
+        processCategoryElement.children().remove();
+        $.ajax({
+
+          url: '{% url 'ajax_get_processCategory' %}',
+          type: 'GET',
+          data: {
+            'pk':divisionCategoryElement.val(),
+          }
+        }).done(response => {
+          for (const process of response.processCategoryList) {
+            const option = $('<option>');
+            option.val(process['pk']);
+            option.text(process['name']);
+            processCategoryElement.append(option);
+          }
+          if (select !== undefined) {
+            processCategoryElement.val(select);
+          }
+
+        });
+
+      };
+
+      divisionCategoryElement.on('change', () => {
+        changeProcess();
+        changeSubprocess();
+        document.getElementById("id_division").value = document.getElementById("id_division_category").value;
+      });
+
+      if (divisionCategoryElement.val()) {
+        const selectedCategory = processCategoryElement.val();
+        changeProcess(selectedCategory);
+      }
+//工程選択時の設備抽出の関数
+   const changeSubprocess = (select) => {
+     subprocessElement.children().remove();
+     $.ajax({
+
+       url: '{% url 'ajax_get_subprocessCategory' %}',
+       type: 'GET',
+       data: {
+         'pk':processCategoryElement.val(),
+       }
+     }).done(response => {
+       for (const subprocess of response.subprocessCategoryList) {
+         const option = $('<option>');
+         option.val(subprocess['pk']);
+         option.text(subprocess['name']);
+         subprocessElement.append(option);
+       }
+       if (select !== undefined) {
+         subprocessElement.val(select);
+       }
+
+     });
+
+   };
+
+   processCategoryElement.on('change', () => {
+     changeSubprocess();
+     document.getElementById("id_process").value = document.getElementById("id_process_category").value;
+   });
+
+   if (processCategoryElement.val()) {
+     const selectedCategory = subprocessElement.val();
+     changeSubprocess(selectedCategory);
+   }
+
+
+    </script>
+{% endblock %}

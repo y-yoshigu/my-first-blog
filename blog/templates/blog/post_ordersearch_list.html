@@ -1,11 +1,21 @@
 {% extends 'blog/base_request.html' %}
 
 {% block content %}
-    <h1>案件リスト</h1>
-    <h4><a href="{% url 'post_order_new' %}">新規追加</a></h4>
-    <h4><a href="{% url 'post_ordersearch_list' %}">検索</a></h4>
-    <a class="btn btn-default" href="{% url 'post_order_allremove' %}">全削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-　　<p></p>
+    <h1>案件抽出</h1>
+    <p>{{ user.username }}</p>
+    <form action="" method="POST">
+        {{ formset.management_form }}
+        <table>
+        {% for form in formset %}
+
+            {{ form.as_table }}
+
+        {% endfor %}
+        </table>
+        {% csrf_token %}
+      <button type="submit">検索</button>
+    </form>
+
       <table width="4000" height="100" border="1">
             <tr>
                  <th width="30" align="center">ID</th>
@@ -35,12 +45,10 @@
                  <th>連絡　完成</th>
                  <th>立会　常時</th>
                  <th>立会　着工前</th>
-                 <th>安全環境確認</th>
-                 <th>入力確認</th>
 
             </tr>
 
-            {% for post in posts %}
+            {% for post in OrderSearch_list %}
 
                     <tr>
                       <td align="center">{{ post.id}}</td>
@@ -132,25 +140,11 @@
                           <td align="center">不要</td>
                       {% endif %}
 
-<!-- 安全環境確認　-->
-                      {% if post.safeApproval %}
-                          <td align="center">確認</td>
-                      {% else %}
-                          <td align="center">未確認</td>
-                      {% endif %}
-
-<!-- 入力確認　-->
-                      {% if post.clientApproval %}
-                          <td align="center">確認</td>
-                      {% else %}
-                          <td align="center">未確認</td>
-                      {% endif %}
-
-
                     </tr>
 
 
             {% endfor %}
 
       </table>
+
 {% endblock %}
