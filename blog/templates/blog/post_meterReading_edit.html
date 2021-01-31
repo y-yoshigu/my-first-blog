@@ -1,0 +1,162 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h2>新規入力</h2>
+<!--
+    <h3><a href="{% url 'QR_reader' %}">QR入力</a>
+    <a class="btn btn-default" href="{% url 'QR_reader' %}"><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></a>
+    </h3>
+-->
+<!--
+    <form action="{% url 'post_meterReading_camera2' %}" method="POST">
+      {% csrf_token %}
+      <p id="wm_tag" name="wm_tag">ファイル名用</p>
+      <input typr="text" id="wm_tag" name="wm_tag" value=1>
+      <button type="submit" id="btn-camera">写真撮影</button>
+    </form>
+-->
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+      const WhmeterElement = $('#id_Whmeter');
+      const wmtagElement = $('#wm_tag');
+
+
+//      const campanyCategoryElement = $('#id_campany_category');
+//      const divisionCategoryElement = $('#id_division_category');
+//      const processCategoryElement = $('#id_process_category');
+//      const subprocessElement = $('#id_subProcess');
+
+     window.onload = () => {
+        document.getElementById("wm_tag").value = document.getElementById("id_Whmeter").value;
+//        document.getElementById("wm_tag").style.display = "none";  //非表示
+
+     }
+
+     WhmeterElement.on('change', () => {
+         document.getElementById("wm_tag").value = document.getElementById("id_Whmeter").value;
+
+      //Whmeterの選択が未定の場合の写真撮影ボタンの表示、非表示
+//         if (WhmeterElement !== undefined) {
+//           document.getElementById("btn-camera").style.display = "none";  //非表示
+
+//         }
+     });
+
+
+
+//会社選択時の部門抽出の関数
+//      const changeDivision = (select) => {
+//        divisionCategoryElement.children().remove();
+//        $.ajax({
+
+//          url: '{% url 'ajax_get_divisionCategory' %}',
+//          type: 'GET',
+//          data: {
+//            'pk':campanyCategoryElement.val(),
+//          }
+//        }).done(response => {
+//          for (const division of response.divisionCategoryList) {
+//            const option = $('<option>');
+//            option.val(division['pk']);
+//            option.text(division['name']);
+//            divisionCategoryElement.append(option);
+//          }
+//          if (select !== undefined) {
+//            divisionCategoryElement.val(select);
+//          }
+
+//        });
+
+//      };
+
+//      campanyCategoryElement.on('change', () => {
+//        changeDivision();
+//        changeProcess();
+//        changeSubprocess();
+//        document.getElementById("id_campany").value = document.getElementById("id_campany_category").value;
+//      });
+
+//      if (campanyCategoryElement.val()) {
+//        const selectedCategory = divisionCategoryElement.val();
+//        changeDivision(selectedCategory);
+//      }
+
+//部門選択時の工程抽出の関数
+//      const changeProcess = (select) => {
+//        processCategoryElement.children().remove();
+//        $.ajax({
+
+//          url: '{% url 'ajax_get_processCategory' %}',
+//          type: 'GET',
+//          data: {
+//            'pk':divisionCategoryElement.val(),
+//          }
+//        }).done(response => {
+//          for (const process of response.processCategoryList) {
+//            const option = $('<option>');
+//            option.val(process['pk']);
+//            option.text(process['name']);
+//            processCategoryElement.append(option);
+//          }
+//          if (select !== undefined) {
+//            processCategoryElement.val(select);
+//          }
+
+//        });
+
+//      };
+
+//      divisionCategoryElement.on('change', () => {
+//        changeProcess();
+//        changeSubprocess();
+//        document.getElementById("id_division").value = document.getElementById("id_division_category").value;
+//      });
+
+//      if (divisionCategoryElement.val()) {
+//        const selectedCategory = processCategoryElement.val();
+//        changeProcess(selectedCategory);
+//      }
+//工程選択時の設備抽出の関数
+//   const changeSubprocess = (select) => {
+//     subprocessElement.children().remove();
+//     $.ajax({
+
+//       url: '{% url 'ajax_get_subprocessCategory' %}',
+//       type: 'GET',
+//       data: {
+//         'pk':processCategoryElement.val(),
+//       }
+//     }).done(response => {
+//       for (const subprocess of response.subprocessCategoryList) {
+//         const option = $('<option>');
+//         option.val(subprocess['pk']);
+//         option.text(subprocess['name']);
+//         subprocessElement.append(option);
+//       }
+//       if (select !== undefined) {
+//         subprocessElement.val(select);
+//       }
+
+//     });
+
+//   };
+
+//   processCategoryElement.on('change', () => {
+//     changeSubprocess();
+//     document.getElementById("id_process").value = document.getElementById("id_process_category").value;
+//   });
+
+//   if (processCategoryElement.val()) {
+//     const selectedCategory = subprocessElement.val();
+//     changeSubprocess(selectedCategory);
+//   }
+
+
+    </script>
+{% endblock %}

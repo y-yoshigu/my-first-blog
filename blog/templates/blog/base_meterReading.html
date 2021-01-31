@@ -1,7 +1,7 @@
 {% load static %}
 <html lang='Ja'>
     <head>
-        <title>工事依頼安全衛生指示システム</title>
+        <title>電力検針システム</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
@@ -12,12 +12,12 @@
         {% if user.is_authenticated %}
             <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
             <p class="top-menu"> <a href="{% url 'MeterReadingSelect' %}">電力</a></p>
-            <p class="top-menu"> <a href="{% url 'master_select' %}">マスタ</a></p>
+<!--            <p class="top-menu"> <a href="{% url 'master_select' %}">マスタ</a></p>   -->
             <p class="top-menu"> <small>(<a href="{% url 'post_order_list' %}">伝票処理</a>)</small></p>
         {% else %}
             <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
         {% endif %}
-            <h1><a href="/">工事依頼安全衛生指示 テスト</a></h1>
+            <h1><a href="{% url 'MeterReadingSelect' %}">電力検針システム テスト</a></h1>
         </div>
 
 <div class="content container">

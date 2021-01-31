@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from datetime import datetime,timedelta
 
 
 class Post(models.Model):
@@ -162,4 +163,36 @@ class Order(models.Model):
 
 
 #電力入力
-#
+class Place(models.Model):
+    name = models.CharField(max_length=30)
+    code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+#電力計
+class Whmeter(models.Model):
+    name = models.CharField(max_length=100)
+    tag = models.CharField(max_length=50)
+#    place = models.CharField(max_length=30)
+    place =  models.ForeignKey(Place,on_delete=models.CASCADE)
+    magnification = models.IntegerField(default=1)
+    unit = models.CharField(max_length=20,default='kWh')
+    maxvalue = models.IntegerField(default=0)
+    digits = models.IntegerField(default=5)
+    decimalPoint = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.tag
+
+#積算検針
+class MeterReading(models.Model):
+    Whmeter = models.ForeignKey(Whmeter,on_delete=models.CASCADE)
+    integrated_Wh = models.FloatField(default=0)
+    readed_date = models.DateTimeField(default=datetime.strptime("1001/01/01 00:00:00","%Y/%m/%d %H:%M:%S"))
+    reader = models.CharField(max_length=20,blank=True,null=True)
+    type = models.CharField(max_length=20,default=1)
+    count_year = models.IntegerField(default=2021)
+    count_month = models.IntegerField(default=1)
+    number = models.IntegerField(default=0)
+#    image = models.ImageField(upload_to='')

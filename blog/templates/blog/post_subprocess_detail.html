@@ -2,25 +2,15 @@
 
 {% block content %}
     <div class="post">
-<!--
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
-            </div>
-        {% else %}
-            <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
-            <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        {% endif %}
--->
-        <h2>{{ post.name }}</h2>
-        <p>{{ post.code }}</p>
-        <p>{{ post.codeM }}</p>
-        <p>{{ post.campany.name }}</p>
-        <p>{{ post.division.name }}</p>
-        <p>{{ post.process.name|linebreaksbr }}</p>
+      <a class="btn btn-default" href="{% url 'post_subprocess_edit' pk=post.pk %}">修正　<span class="glyphicon glyphicon-pencil"></span></a>
+      <a class="btn btn-default" href="{% url 'post_subprocess_remove' pk=post.pk %}">削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+      <p> </p>
+ 　　　<p>-----------------------------------------------------</p>
+        <p>設備コード名　　 ：{{ post.name }}</p>
+        <p>設備コード　　　 ：{{ post.code }}</p>
+        <p>設備コードMESCO：{{ post.codeM }}</p>
+        <p>会社　　　　　　　：{{ post.campany.name }}</p>
+        <p>部門　　　　　　　：{{ post.division.name }}</p>
+        <p>工程　　　　　　　：{{ post.process.name|linebreaksbr }}</p>
     </div>
 {% endblock %}

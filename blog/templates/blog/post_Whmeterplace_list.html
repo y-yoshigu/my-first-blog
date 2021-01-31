@@ -1,0 +1,35 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h1>電力量計取付場所</h1>
+    <h4><a href="{% url 'post_Whmeterplace_new' %}">新規追加</a></h4>
+
+      <table border="1">
+            <tr>
+                 <th width='30'>ID</th>
+                 <th width='180'>取付場所</th>
+                 <th width='180'>場所コード</th>
+
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr>
+                      <td align='center'>{{ post.id}}</td>
+                      <td align='center'><a href="{% url 'post_Whmeterplace_detail' pk=post.pk %}">{{ post.name }}</a></td>
+                      <td>{{ post.code}}</td>
+                    </tr>
+
+<!--
+                <div class="post">
+                    <div class="date">
+                        <p>published: {{ post.published_date }}</p>
+                    </div>
+                    <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+-->
+            {% endfor %}
+
+      </table>
+{% endblock %}

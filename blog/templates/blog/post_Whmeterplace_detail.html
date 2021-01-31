@@ -1,0 +1,12 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <div class="post">
+      <a class="btn btn-default" href="{% url 'post_Whmeterplace_edit' pk=post.pk %}">修正　<span class="glyphicon glyphicon-pencil"></span></a>
+      <a class="btn btn-default" href="{% url 'post_Whmeterplace_remove' pk=post.pk %}">削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+        <p></p>
+        <p>ID  　 　 :{{ post.id }}</p>
+        <p>取付場所　：{{ post.name }}</p>
+        <p>コード　　：{{ post.code }}</p>
+    </div>
+{% endblock %}

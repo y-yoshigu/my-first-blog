@@ -1,0 +1,12 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+
+  <h2>電力検針項目選択</h2>
+  <h2><a href="{% url 'MeterReadingManage' %}">管理者用</a></h2>
+  <h2><a href="{% url 'MeterReading_Rmonthly' %}">検針者用</a></h2>
+  <h2><a href="{% url 'post_meterReading_camera' %}">カメラ</a></h2>
+<!--  <h2><a href="{% url 'post_cameraOCR_test3' %}">OCRテスト</a></h2>  -->
+  <h2><a href="{% url 'QR_reader' %}">QR</a></h2>
+
+{% endblock %}

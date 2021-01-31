@@ -2,6 +2,7 @@ from django import forms
 
 from .models import Post
 from .models import Campany,Division,Process,Subprocess,Order,Failuretype,ExpenseItems
+from .models import Whmeter,MeterReading,Place
 
 class PostForm(forms.ModelForm):
 
@@ -182,4 +183,110 @@ class OrderSearchForm(forms.Form):
 
 OrderSearchFormSet = forms.formset_factory(OrderSearchForm,extra=1)
 
+
+
+#電力量計入力
+class WhmeterForm(forms.ModelForm):
+
+    class Meta:
+        model = Whmeter
+        fields = ('name', 'tag','place','magnification','unit','maxvalue','digits','decimalPoint')
+        labels = {'name':'機器', 'tag':'電力量計コード','place':'取付場所','magnification':'倍率','unit':'単位','maxvalue':'最大値','digits':'桁数','decimalPoint':'小数点位置'}
+
+#電力量計場所
+class PlaceForm(forms.ModelForm):
+
+    class Meta:
+        model = Place
+        fields = ('name','code')
+        labels = {'name':'取付場所','code':'コード'}
+
+
+#電力検針
+class MeterReadingForm(forms.ModelForm):
+
+    MeterReading_id = forms.IntegerField(
+        label = 'ID',
+#        max_length = 10,
+        required = False,
+    )
+
+    Whmeter_name = forms.CharField(
+        label = '機器',
+        max_length = 30,
+        required = False,
+    )
+
+    Whmeter_place = forms.CharField(
+        label = '取付場所',
+        max_length = 50,
+        required = False,
+    )
+
+    Whmeter_unit = forms.CharField(
+        label = '単位',
+        max_length = 15,
+        required = False,
+    )
+
+    Wh_now = forms.FloatField(
+        label = '使用電力量（今月）',
+        required = False,
+    )
+
+    Wh_last = forms.FloatField(
+        label = '使用電力量（前月）',
+        required = False,
+    )
+
+    class Meta:
+        model = MeterReading
+        fields = ( 'MeterReading_id','Whmeter', 'Whmeter_name','Whmeter_place','Whmeter_unit','integrated_Wh','reader','count_year','count_month','number','Wh_now','Wh_last')
+        labels = { 'Whmeter':'電力量計', 'integrated_Wh':'積算値','reader':'検針者','count_year':'積算年','count_month':'積算月'}
+
 #
+class MeterReadingSearchForm(forms.Form):
+
+    Whmeter_place_search = forms.ModelChoiceField(
+        label = '取付場所 ',
+        queryset = Place.objects,
+        required = False,
+    )
+
+    count_year_search = forms.IntegerField(
+        label = '積算年 ',
+        required = False,
+    )
+
+    count_month_search = forms.IntegerField(
+        label = '積算月 ',
+        required = False,
+    )
+
+MeterReadingSearchFormSet = forms.formset_factory(MeterReadingSearchForm,extra=1)
+
+#検針年月入力
+class ReadingMonthlyForm(forms.Form):
+
+    count_year_Rsearch = forms.IntegerField(
+        label = '積算年 ',
+        required = False,
+    )
+
+    count_month_Rsearch = forms.IntegerField(
+        label = '積算月 ',
+        required = False,
+    )
+
+ReadingMonthlyFormSet = forms.formset_factory(ReadingMonthlyForm,extra=1)
+
+#
+class MeterReadingReaderSearchForm(forms.Form):
+
+    Whmeter_place_search = forms.ModelChoiceField(
+        label = '取付場所 ',
+        queryset = Place.objects,
+        required = False,
+    )
+
+MeterReadingReaderSearchFormSet = forms.formset_factory(MeterReadingReaderSearchForm,extra=1)

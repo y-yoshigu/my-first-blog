@@ -1,8 +1,9 @@
-{% extends 'blog/base3.html' %}
+{% extends 'blog/base_qr.html' %}
 
 {% block content %}
-    <h2>QRリーダー入力テスト</h2>
-
+    <h2>QRリーダー入力</h2>
+    <p>{{Rcount_year}}年{{Rcount_month}}月検針</p>
+    <button type="button" id="btn-toggle">カメラ切替</button>
     <section id="contents">
       <!-- カメラ映像 -->
       <video id="camera" width="300" height="200" muted></video>
@@ -17,53 +18,112 @@
 
     </section>
 
-    <form method="POST">
+    <form action="{% url 'post_Whmeter_qrR' %}" method="POST">
       {% csrf_token %}
-     <p id="sample" name="qrdata"></p>
-     <button type="submit" >送信</button>
+     <label>電力量計コード
+       <input type="text" id="Whmeter" name="Whmeter" value="入力値">
+     </label><br>
+       <input type="text" id="Rcount_year" name="Rcount_year">
+       <input type="text" id="Rcount_month" name="Rcount_month">
+      <button type="submit" >送信</button>
     </form>
 
-<!--
-    <form action="" method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
--->
+
 {% endblock %}
 {% block extrajs %}
     <script>
-  const video  = $("#camera");     // === document.querySelector("#camera");
-  const canvas = $("#picture");    // === document.querySelector("#picture");
+  const video = document.querySelector("#camera");
+  const canvas = document.querySelector("#picture");
+//  const se     = document.querySelector('#se');
+  let useFront = true;     // フロントカメラ:true, バックカメラ:false
   const ctx = canvas.getContext("2d");
 
+  // 現在のStream
+  var curSTREAM = null;
+  /**カメラ設定*/
+  const constraints = {
+    audio: false,
+    video: {
+      width: 300,
+      height: 200,
+      facingMode: null  //"user"   // フロントカメラを利用する
+    }
+  };
+
   window.onload = () => {
-    /** カメラ設定 */
-    const constraints = {
-      audio: false,
-      video: {
-        width: 300,
-        height: 200,
-        facingMode: "user"   // フロントカメラを利用する
-      }
-    };
+
+    document.getElementById("Rcount_year").value = {{Rcount_year}};
+    document.getElementById("Rcount_month").value = {{Rcount_month}};
+    document.getElementById("Rcount_year").style.display = "none";  //非表示
+    document.getElementById("Rcount_month").style.display = "none";  //非表示
 
     /**
      * カメラを<video>と同期
      */
      navigator.mediaDevices.getUserMedia(constraints)
+
     .then( (stream) => {
       video.srcObject = stream;
       video.onloadedmetadata = (e) => {
         video.play();
 
+    // カメラと同期開始
+//    syncCamera(video, useFront);
+    useFront = !useFront;         // boolean値を反転
+
+    //-------------------------------
+    // [event] 切り替えボタン押下
+    //-------------------------------
+    document.querySelector("#btn-toggle").addEventListener("click", ()=>{
+      syncCamera(video, useFront);
+      useFront = !useFront;      // boolean値を反転
+    });
+
         // QRコードのチェック開始
+
         checkPicture();
+
       };
     })
     .catch( (err) => {
       console.log(err.name + ": " + err.message);
     });
-  };
+  };  //window.onloadの対
+
+
+  /**
+   * カメラを<video>と同期
+   *
+   * @param {object} video
+   * @param {boolean} [is_front=true]
+   */
+function syncCamera(video, is_front=true){
+    // 前後カメラの設定
+    constraints.video.facingMode = (is_front)?  "user":{ exact: "environment" };
+
+    // すでにカメラと接続していたら停止
+    if( curSTREAM !== null ){
+      curSTREAM.getVideoTracks().forEach( (camera) => {
+        camera.stop();
+      });
+    }
+
+    // カメラと接続する
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then( (stream) => {
+        curSTREAM = stream;   // 前後の切り替え用に保持
+
+        // <video>とStremaを接続
+        video.srcObject = stream;
+        video.onloadedmetadata = (e) => {
+          video.play();
+        };
+      })
+      .catch( (err) => {
+        console.log(`${err.name}: ${err.message}`);
+        alert("カメラとの接続時にエラーが発生しました");
+      });
+  }
 
   /**
    * QRコードの読み取り
@@ -75,6 +135,8 @@
     // QRコードの読み取り
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const code = jsQR(imageData.data, canvas.width, canvas.height);
+//
+    var mydiv =document.getElementById("result");
 
     //----------------------
     // 存在する場合
@@ -82,14 +144,16 @@
     if( code ){
       // 結果を表示
       setQRResult("#result", code.data);  // 文字列
-      //テスト用追加
-      setQRResult("#sample", code.data);
+      //電力用追加
+      document.getElementById("Whmeter").value = mydiv.innerHTML;  //
+
       drawLine(ctx, code.location);       // 見つかった箇所に線を引く
 
       // video と canvas を入れ替え
       canvas.style.display = 'block';
       video.style.display = 'none';
       video.pause();
+
     }
     //----------------------
     // 存在しない場合
@@ -101,7 +165,6 @@
       }, 300);
     }
   }
-
 
   /**
    * 発見されたQRコードに線を引く
@@ -165,8 +228,6 @@
 
     return(result);
   }
-
-
 
     </script>
 {% endblock %}

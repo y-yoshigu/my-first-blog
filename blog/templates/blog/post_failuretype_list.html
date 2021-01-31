@@ -13,7 +13,7 @@
 
                     <tr align="center">
                       <td>{{ post.id}}</td>
-                      <td>{{ post.name }}</td>
+                      <td><a href="{% url 'post_failuretype_detail' pk=post.pk %}">{{ post.name }}</a></td>
                     </tr>
 
             {% endfor %}

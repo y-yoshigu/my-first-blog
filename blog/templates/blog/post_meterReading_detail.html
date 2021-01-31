@@ -1,0 +1,20 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <div class="post">
+      <a class="btn btn-default" href="{% url 'post_meterReading_edit' pk=post.pk %}">修正　<span class="glyphicon glyphicon-pencil"></span></a>
+      <a class="btn btn-default" href="{% url 'post_meterReading_remove' pk=post.pk %}">削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+
+        <p>ID　　　　　：{{ post.id }}</p>
+        <p>電力計コード：{{ post.Whmeter.tag }}</p>
+        <p>機器　　　　：{{ post.Whmeter.name }}</p>
+        <p>取付場所　　：{{ post.Whmeter.place }}</p>
+        <p>積算値　　　：{{ post.integrated_Wh }}</p>
+        <p>検針日時　　：{{ post.readed_date }}</p>
+        <p>検針者　　　：{{ post.reader }}</p>
+        <p>タイプ　　　：{{ post.type }}</p>
+        <p>積算年　　　：{{ post.count_year }}</p>
+        <p>積算月　　　：{{ post.count_month }}</p>
+        <p>識別No　　　：{{ post.number }}</p>
+    </div>
+{% endblock %}

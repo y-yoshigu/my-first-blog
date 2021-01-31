@@ -1,0 +1,192 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h2>電力検針入力　({{Rcount_year}}年{{Rcount_month}}月検針)</h2>
+<!--    <h3>電力量　({{wh}} kWh)</h3>  -->
+    {% if judgment == 2 %}
+      <p>電力量　{{wh}} kWh</p>
+      <h3 style="color:red">変化量大</h3>
+    {% else %}
+      <p>電力量　{{wh}} kWh</p>
+    {% endif %}
+
+    <form action="{% url 'post_meterReading_Rcamera2' %}" method="POST">
+      {% csrf_token %}
+      <input typr="text" id="wm_tag" name="wm_tag" value=1>
+      <input type="text" id="Rcount_year" name="Rcount_year">
+      <input type="text" id="Rcount_month" name="Rcount_month">
+      <button type="submit" id="btn-camera">写真撮影</button>
+    </form>
+
+    <form action="{% url 'post_meterReading_ReditR' %}" method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+
+    <form action="" method="POST" class="post-form" class="post-form">
+       {% csrf_token %}
+        <input type="text" id='integrated_now' name='integrated_now' value="0">
+        <button type="submit" class="save btn btn-default">使用量</button>
+    </form>
+
+
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+      const WhmeterElement = $('#id_Whmeter');
+      const wmtagElement = $('#wm_tag');
+      const IntegratedWhElement = $('#id_integrated_Wh');
+
+//      const campanyCategoryElement = $('#id_campany_category');
+//      const divisionCategoryElement = $('#id_division_category');
+//      const processCategoryElement = $('#id_process_category');
+//      const subprocessElement = $('#id_subProcess');
+
+     window.onload = () => {
+        document.getElementById("wm_tag").value = document.getElementById("id_Whmeter").value;
+        document.getElementById("id_MeterReading_id").value = {{pk}};
+
+        document.getElementById("wm_tag").style.display = "none";  //非表示
+//        document.getElementById("id_MeterReading_id").style.display = "none";  //非表示
+
+        document.getElementById("Rcount_year").value = {{Rcount_year}};
+        document.getElementById("Rcount_month").value = {{Rcount_month}};
+        document.getElementById("Rcount_year").style.display = "none";  //非表示
+        document.getElementById("Rcount_month").style.display = "none";  //非表示
+
+        document.getElementById("integrated_now").value = document.getElementById("id_integrated_Wh").value;
+        document.getElementById("integrated_now").style.display = "none";  //非表示
+
+        document.getElementById("id_Wh_now").value = {{wh}};
+        document.getElementById("id_Wh_last").value = {{wh_last}};
+
+     }
+
+     WhmeterElement.on('change', () => {
+         document.getElementById("wm_tag").value = document.getElementById("id_Whmeter").value;
+
+      //Whmeterの選択が未定の場合の写真撮影ボタンの表示、非表示
+//         if (WhmeterElement !== undefined) {
+//           document.getElementById("btn-camera").style.display = "none";  //非表示
+
+//         }
+     });
+
+     IntegratedWhElement.on('change', () => {
+         document.getElementById("integrated_now").value = document.getElementById("id_integrated_Wh").value;
+
+     });
+
+
+
+//会社選択時の部門抽出の関数
+//      const changeDivision = (select) => {
+//        divisionCategoryElement.children().remove();
+//        $.ajax({
+
+//          url: '{% url 'ajax_get_divisionCategory' %}',
+//          type: 'GET',
+//          data: {
+//            'pk':campanyCategoryElement.val(),
+//          }
+//        }).done(response => {
+//          for (const division of response.divisionCategoryList) {
+//            const option = $('<option>');
+//            option.val(division['pk']);
+//            option.text(division['name']);
+//            divisionCategoryElement.append(option);
+//          }
+//          if (select !== undefined) {
+//            divisionCategoryElement.val(select);
+//          }
+
+//        });
+
+//      };
+
+//      campanyCategoryElement.on('change', () => {
+//        changeDivision();
+//        changeProcess();
+//        changeSubprocess();
+//        document.getElementById("id_campany").value = document.getElementById("id_campany_category").value;
+//      });
+
+//      if (campanyCategoryElement.val()) {
+//        const selectedCategory = divisionCategoryElement.val();
+//        changeDivision(selectedCategory);
+//      }
+
+//部門選択時の工程抽出の関数
+//      const changeProcess = (select) => {
+//        processCategoryElement.children().remove();
+//        $.ajax({
+
+//          url: '{% url 'ajax_get_processCategory' %}',
+//          type: 'GET',
+//          data: {
+//            'pk':divisionCategoryElement.val(),
+//          }
+//        }).done(response => {
+//          for (const process of response.processCategoryList) {
+//            const option = $('<option>');
+//            option.val(process['pk']);
+//            option.text(process['name']);
+//            processCategoryElement.append(option);
+//          }
+//          if (select !== undefined) {
+//            processCategoryElement.val(select);
+//          }
+
+//        });
+
+//      };
+
+//      divisionCategoryElement.on('change', () => {
+//        changeProcess();
+//        changeSubprocess();
+//        document.getElementById("id_division").value = document.getElementById("id_division_category").value;
+//      });
+
+//      if (divisionCategoryElement.val()) {
+//        const selectedCategory = processCategoryElement.val();
+//        changeProcess(selectedCategory);
+//      }
+//工程選択時の設備抽出の関数
+//   const changeSubprocess = (select) => {
+//     subprocessElement.children().remove();
+//     $.ajax({
+
+//       url: '{% url 'ajax_get_subprocessCategory' %}',
+//       type: 'GET',
+//       data: {
+//         'pk':processCategoryElement.val(),
+//       }
+//     }).done(response => {
+//       for (const subprocess of response.subprocessCategoryList) {
+//         const option = $('<option>');
+//         option.val(subprocess['pk']);
+//         option.text(subprocess['name']);
+//         subprocessElement.append(option);
+//       }
+//       if (select !== undefined) {
+//         subprocessElement.val(select);
+//       }
+
+//     });
+
+//   };
+
+//   processCategoryElement.on('change', () => {
+//     changeSubprocess();
+//     document.getElementById("id_process").value = document.getElementById("id_process_category").value;
+//   });
+
+//   if (processCategoryElement.val()) {
+//     const selectedCategory = subprocessElement.val();
+//     changeSubprocess(selectedCategory);
+//   }
+
+
+    </script>
+{% endblock %}

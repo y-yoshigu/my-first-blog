@@ -1,0 +1,47 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h1>電力量計</h1>
+    <h4><a href="{% url 'post_Whmeter_new' %}">新規追加</a></h4>
+
+      <table border="1">
+            <tr>
+                 <th width='30'>ID</th>
+                 <th width='180'>電力量計コード</th>
+                 <th width='280'>機器</th>
+                 <th width='280'>取付場所</th>
+                 <th width='60'>倍率</th>
+                 <th width='60'>単位</th>
+                 <th width='80'>最大値</th>
+                 <th width='60'>桁数</th>
+                 <th width='100'>小数点位置</th>
+
+            </tr>
+
+            {% for post in posts %}
+
+                    <tr>
+                      <td align='center'>{{ post.id}}</td>
+                      <td align='center'><a href="{% url 'post_Whmeter_detail' pk=post.pk %}">{{ post.tag }}</a></td>
+                      <td>{{ post.name}}</td>
+                      <td>{{ post.place.name}}</td>
+                      <td>{{ post.magnification}}</td>
+                      <td>{{ post.unit}}</td>
+                      <td>{{ post.maxvalue}}</td>
+                      <td>{{ post.digits}}</td>
+                      <td>{{ post.decimalPoint}}</td>
+                    </tr>
+
+<!--
+                <div class="post">
+                    <div class="date">
+                        <p>published: {{ post.published_date }}</p>
+                    </div>
+                    <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+-->
+            {% endfor %}
+
+      </table>
+{% endblock %}

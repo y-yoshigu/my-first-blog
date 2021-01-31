@@ -1,0 +1,89 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h1>電力検針抽出</h1>
+    <h3>{{Scount_year}}年{{Scount_month}}月検針</h3>
+
+    <form action="" method="POST">
+        {{ formset.management_form }}
+        <table>
+        {% for form in formset %}
+
+            {{ form.as_table }}
+
+        {% endfor %}
+        </table>
+        {% csrf_token %}
+      <button type="submit">検索</button>
+    </form>
+
+    <form action="{% url 'post_qrreader_R' %}" method="POST">
+      {% csrf_token %}
+       <input type="text" id="Rcount_year" name="Rcount_year">
+       <input type="text" id="Rcount_month" name="Rcount_month">
+       <button type="submit" class="btn btn-default">QR入力<span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></button>
+    </form>
+
+      <table border="1">
+            <tr>
+                 <th width='30'>ID</th>
+                 <th width='180'>電力量計コード</th>
+                 <th width='550'>機器</th>
+                 <th width='550'>取付場所</th>
+                 <th width='150'>積算値</th>
+                 <th width='400'>検針日時</th>
+                 <th width='100'>検針者</th>
+                 <th width='50'>タイプ</th>
+                 <th width='80'>積算年</th>
+                 <th width='120'>積算月</th>
+                 <th width='80'>識別No</th>
+
+            </tr>
+
+            {% for post in MeterReadingSearch_Rlist %}
+
+                    <tr>
+                      <td align='center'>{{ post.id}}</td>
+                      <!-- 未検針表示用  -->
+                      {% if post.reader %}
+                       <td align='center'><a href="{% url 'post_meterReading_Redit' pk=post.pk %}">{{ post.Whmeter.tag }}</a></td>
+                      {% else %}
+                       <td bgcolor="#FF0461" align='center'><a href="{% url 'post_meterReading_Redit' pk=post.pk %}">{{ post.Whmeter.tag }}</a></td>
+                      {% endif %}
+
+                      <td>{{ post.Whmeter.name}}</td>
+                      <td>{{ post.Whmeter.place}}</td>
+                      <td>{{ post.integrated_Wh}}</td>
+                      <td>{{ post.readed_date}}</td>
+                      {% if post.reader %}
+                          <td>{{ post.reader}}</td>
+                      {% else %}
+                          <td bgcolor="#FF0461">{{ post.reader}}</td>
+                      {% endif %}
+
+                      <td>{{ post.type}}</td>
+                      <td>{{ post.count_year}}</td>
+                      <td>{{ post.count_month}}</td>
+                      <td align='center'>{{ post.number}}</td>
+                    </tr>
+
+
+            {% endfor %}
+
+      </table>
+{% endblock %}
+
+{% block extrajs %}
+ <script>
+
+  window.onload = () => {
+
+    document.getElementById("Rcount_year").value = {{Scount_year}};
+    document.getElementById("Rcount_month").value = {{Scount_month}};
+    document.getElementById("Rcount_year").style.display = "none";  //非表示
+    document.getElementById("Rcount_month").style.display = "none";  //非表示
+
+  }
+
+ </script>
+{% endblock %}

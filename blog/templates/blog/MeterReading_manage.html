@@ -1,0 +1,14 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+
+  <h2>電力検針 管理者項目選択</h2>
+  <h2><a href="{% url 'post_Whmeterplace_list' %}">電力量計取付場所マスタ</a></h2>
+  <h2><a href="{% url 'post_Whmeter_list' %}">電力量計マスタ</a></h2>
+  <h2><a href="{% url 'post_meterReading_list' %}">検針リスト</a></h2>
+  <h2><a href="{% url 'MeterReading_monthly' %}">一括入力</a></h2>
+  <h2><a href="{% url 'meterReading_export' %}">CSV出力</a></h2>
+  <h2> </h2>
+  <h4><a href="{% url 'post_cameraOCR_test3' %}">OCRテスト</a></h4>
+
+{% endblock %}

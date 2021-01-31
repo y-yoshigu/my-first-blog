@@ -1,0 +1,12 @@
+{% extends 'blog/base_request.html' %}
+
+{% block content %}
+    <div class="post">
+      <a class="btn btn-default" href="{% url 'post_expenseItems_edit' pk=post.pk %}">修正　<span class="glyphicon glyphicon-pencil"></span></a>
+      <a class="btn btn-default" href="{% url 'post_expenseItems_remove' pk=post.pk %}">削除　<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+      <p> </p>
+ 　　　<p>-----------------------------------------------------</p>
+       <p>ID　　　：{{ post.id }}</p>
+       <p>費目名　：{{ post.name }}</p>
+    </div>
+{% endblock %}

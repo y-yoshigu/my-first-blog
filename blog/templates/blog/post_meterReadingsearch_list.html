@@ -1,0 +1,54 @@
+{% extends 'blog/base_meterReading.html' %}
+
+{% block content %}
+    <h1>電力検針抽出</h1>
+    <form action="" method="POST">
+        {{ formset.management_form }}
+        <table>
+        {% for form in formset %}
+
+            {{ form.as_table }}
+
+        {% endfor %}
+        </table>
+        {% csrf_token %}
+      <button type="submit">検索</button>
+    </form>
+
+      <table border="1">
+            <tr>
+                 <th width='30'>ID</th>
+                 <th width='180'>電力量計コード</th>
+                 <th width='550'>機器</th>
+                 <th width='550'>取付場所</th>
+                 <th width='150'>積算値</th>
+                 <th width='400'>検針日時</th>
+                 <th width='100'>検針者</th>
+                 <th width='50'>タイプ</th>
+                 <th width='80'>積算年</th>
+                 <th width='120'>積算月</th>
+                 <th width='80'>識別No</th>
+
+            </tr>
+
+            {% for post in MeterReadingSearch_list %}
+
+                    <tr>
+                      <td align='center'>{{ post.id}}</td>
+                      <td align='center'><a href="{% url 'post_meterReading_detail' pk=post.pk %}">{{ post.Whmeter.tag }}</a></td>
+                      <td>{{ post.Whmeter.name}}</td>
+                      <td>{{ post.Whmeter.place}}</td>
+                      <td>{{ post.integrated_Wh}}</td>
+                      <td>{{ post.readed_date}}</td>
+                      <td>{{ post.reader}}</td>
+                      <td>{{ post.type}}</td>
+                      <td>{{ post.count_year}}</td>
+                      <td>{{ post.count_month}}</td>
+                      <td align='center'>{{ post.number}}</td>
+                    </tr>
+
+
+            {% endfor %}
+
+      </table>
+{% endblock %}
